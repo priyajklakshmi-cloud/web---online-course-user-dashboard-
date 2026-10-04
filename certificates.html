@@ -1,0 +1,1013 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates | LearnSphere</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f6f1e9;
+            color: #27231f;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            background: #211c18;
+            color: white;
+            padding: 28px 18px;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            padding: 0 12px 30px;
+            color: #f4a261;
+        }
+
+        .logo span {
+            color: #fff;
+        }
+
+        .menu-title {
+            font-size: 11px;
+            color: #8f8780;
+            margin: 10px 12px 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #bdb5ae;
+            padding: 13px 14px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: #f4a261;
+            color: #211c18;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+        }
+
+        .logout a {
+            color: #e58f8f;
+        }
+
+        .main {
+            margin-left: 245px;
+            padding: 30px 38px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            font-size: 29px;
+            margin-bottom: 6px;
+        }
+
+        .page-title p {
+            color: #817870;
+            font-size: 14px;
+        }
+
+        .user-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #f4a261;
+            color: #211c18;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-info strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .user-info small {
+            color: #8b8179;
+        }
+
+        .achievement-banner {
+            background: linear-gradient(135deg, #31251e, #533b2d);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .achievement-banner h2 {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .achievement-banner p {
+            color: #d9cec5;
+            max-width: 650px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .trophy {
+            font-size: 75px;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e7ded5;
+            border-radius: 16px;
+            padding: 22px;
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #fff0df;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card h3 {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 13px;
+            color: #8b8179;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .section-header h2 {
+            font-size: 21px;
+        }
+
+        .section-header span {
+            font-size: 13px;
+            color: #8a817a;
+        }
+
+        .certificate-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .certificate-card {
+            background: white;
+            border: 1px solid #e6ddd5;
+            border-radius: 18px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(55, 42, 30, 0.10);
+        }
+
+        .certificate-preview {
+            height: 190px;
+            border-radius: 13px;
+            background:
+                linear-gradient(135deg, rgba(244,162,97,.15), rgba(255,255,255,.7)),
+                #fffaf4;
+            border: 2px solid #ead4be;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .certificate-preview::before {
+            content: "";
+            position: absolute;
+            inset: 8px;
+            border: 1px solid #d7b28e;
+            border-radius: 9px;
+        }
+
+        .certificate-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .certificate-content .small-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #9a7656;
+            margin-bottom: 8px;
+        }
+
+        .certificate-content h3 {
+            font-family: Georgia, serif;
+            font-size: 21px;
+            color: #4c3526;
+            margin-bottom: 8px;
+        }
+
+        .certificate-content p {
+            font-size: 11px;
+            color: #817870;
+        }
+
+        .certificate-info h3 {
+            font-size: 17px;
+            margin-bottom: 7px;
+        }
+
+        .certificate-info p {
+            font-size: 13px;
+            color: #837a73;
+            margin-bottom: 14px;
+        }
+
+        .certificate-meta {
+            display: flex;
+            gap: 18px;
+            font-size: 12px;
+            color: #746b64;
+            margin-bottom: 17px;
+        }
+
+        .certificate-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 9px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .btn-view {
+            background: #211c18;
+            color: white;
+        }
+
+        .btn-download {
+            background: #f8e4d0;
+            color: #6a4328;
+        }
+
+        .btn:hover {
+            opacity: 0.88;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(25, 20, 16, 0.78);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            width: min(850px, 100%);
+            max-height: 92vh;
+            overflow-y: auto;
+            border-radius: 18px;
+            padding: 25px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 16px;
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 50%;
+            background: #f1ebe5;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .certificate-large {
+            margin-top: 25px;
+            border: 8px solid #ead4be;
+            padding: 45px 30px;
+            text-align: center;
+            background: #fffaf4;
+            min-height: 470px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .certificate-large::before {
+            content: "";
+            position: absolute;
+            inset: 14px;
+            border: 2px solid #c99b6c;
+        }
+
+        .large-inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        .large-inner .academy {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #94704f;
+            margin-bottom: 20px;
+        }
+
+        .large-inner h1 {
+            font-family: Georgia, serif;
+            font-size: 38px;
+            color: #493124;
+            margin-bottom: 25px;
+        }
+
+        .large-inner .presented {
+            color: #77706a;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .recipient-name {
+            font-family: Georgia, serif;
+            font-size: 31px;
+            color: #bc7440;
+            margin-bottom: 18px;
+        }
+
+        .large-course {
+            font-size: 20px;
+            font-weight: bold;
+            color: #30251f;
+            margin-bottom: 12px;
+        }
+
+        .large-description {
+            max-width: 570px;
+            margin: auto;
+            color: #766d66;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .certificate-footer {
+            display: flex;
+            justify-content: space-between;
+            max-width: 650px;
+            margin: 40px auto 0;
+            font-size: 11px;
+            color: #70675f;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .certificate-large,
+            .certificate-large * {
+                visibility: visible;
+            }
+
+            .certificate-large {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border: 8px solid #ead4be;
+            }
+
+            .modal-actions,
+            .close {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .certificate-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 750px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 18px;
+            }
+
+            .logo {
+                padding-bottom: 15px;
+            }
+
+            .nav-links {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .logout {
+                position: static;
+                margin-top: 10px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 22px 16px;
+            }
+
+            .achievement-banner {
+                padding: 22px;
+            }
+
+            .trophy {
+                display: none;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .certificate-footer {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .large-inner h1 {
+                font-size: 28px;
+            }
+
+            .recipient-name {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            Learn<span>Sphere</span>
+        </div>
+
+        <div class="menu-title">Learning</div>
+
+        <nav class="nav-links">
+            <a href="dashboard.html">🏠 Dashboard</a>
+            <a href="courses.html">📚 My Courses</a>
+            <a href="certificates.html" class="active">🏆 Certificates</a>
+            <a href="profile.html">👤 My Profile</a>
+            <a href="dashboard.html">📅 Schedule</a>
+            <a href="dashboard.html">🔔 Notifications</a>
+        </nav>
+
+        <div class="logout">
+            <nav class="nav-links">
+                <a href="#" onclick="logout()">↪ Logout</a>
+            </nav>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <div class="topbar">
+
+            <div class="page-title">
+                <h1>My Certificates 🏆</h1>
+                <p>Celebrate your learning achievements and completed courses.</p>
+            </div>
+
+            <div class="user-box">
+                <div class="avatar" id="avatar">LP</div>
+
+                <div class="user-info">
+                    <strong id="userName">Learner</strong>
+                    <small>Student Account</small>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ACHIEVEMENT BANNER -->
+        <section class="achievement-banner">
+
+            <div>
+                <h2>Your achievements matter.</h2>
+
+                <p>
+                    Every completed course represents a new skill.
+                    Keep learning, complete more courses and build a strong
+                    professional portfolio.
+                </p>
+            </div>
+
+            <div class="trophy">🏆</div>
+
+        </section>
+
+
+        <!-- STATS -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <h3>04</h3>
+                <p>Certificates Earned</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <h3>48h</h3>
+                <p>Total Learning Hours</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <h3>92%</h3>
+                <p>Average Course Score</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <h3>Sep 2026</h3>
+                <p>Latest Certificate</p>
+            </div>
+
+        </section>
+
+
+        <!-- CERTIFICATES -->
+        <div class="section-header">
+
+            <div>
+                <h2>Earned Certificates</h2>
+            </div>
+
+            <span>4 completed courses</span>
+
+        </div>
+
+
+        <section class="certificate-grid">
+
+            <!-- CERTIFICATE 1 -->
+            <article class="certificate-card">
+
+                <div class="certificate-preview">
+
+                    <div class="certificate-content">
+                        <div class="small-title">LearnSphere Certificate</div>
+
+                        <h3>Python Programming Basics</h3>
+
+                        <p>Successfully completed the course</p>
+                    </div>
+
+                </div>
+
+                <div class="certificate-info">
+
+                    <h3>Python Programming Basics</h3>
+
+                    <p>Programming • Beginner Level</p>
+
+                    <div class="certificate-meta">
+                        <span>📅 Sep 18, 2026</span>
+                        <span>⭐ 94%</span>
+                    </div>
+
+                    <div class="certificate-buttons">
+                        <button class="btn btn-view"
+                            onclick="viewCertificate('Python Programming Basics', 'September 18, 2026', '94%')">
+                            View Certificate
+                        </button>
+
+                        <button class="btn btn-download"
+                            onclick="viewCertificate('Python Programming Basics', 'September 18, 2026', '94%')">
+                            Download
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CERTIFICATE 2 -->
+            <article class="certificate-card">
+
+                <div class="certificate-preview">
+
+                    <div class="certificate-content">
+                        <div class="small-title">LearnSphere Certificate</div>
+
+                        <h3>HTML & CSS Essentials</h3>
+
+                        <p>Successfully completed the course</p>
+                    </div>
+
+                </div>
+
+                <div class="certificate-info">
+
+                    <h3>HTML & CSS Essentials</h3>
+
+                    <p>Web Development • Beginner Level</p>
+
+                    <div class="certificate-meta">
+                        <span>📅 Aug 29, 2026</span>
+                        <span>⭐ 91%</span>
+                    </div>
+
+                    <div class="certificate-buttons">
+                        <button class="btn btn-view"
+                            onclick="viewCertificate('HTML & CSS Essentials', 'August 29, 2026', '91%')">
+                            View Certificate
+                        </button>
+
+                        <button class="btn btn-download"
+                            onclick="viewCertificate('HTML & CSS Essentials', 'August 29, 2026', '91%')">
+                            Download
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CERTIFICATE 3 -->
+            <article class="certificate-card">
+
+                <div class="certificate-preview">
+
+                    <div class="certificate-content">
+                        <div class="small-title">LearnSphere Certificate</div>
+
+                        <h3>JavaScript Fundamentals</h3>
+
+                        <p>Successfully completed the course</p>
+                    </div>
+
+                </div>
+
+                <div class="certificate-info">
+
+                    <h3>JavaScript Fundamentals</h3>
+
+                    <p>Programming • Intermediate Level</p>
+
+                    <div class="certificate-meta">
+                        <span>📅 Aug 12, 2026</span>
+                        <span>⭐ 90%</span>
+                    </div>
+
+                    <div class="certificate-buttons">
+                        <button class="btn btn-view"
+                            onclick="viewCertificate('JavaScript Fundamentals', 'August 12, 2026', '90%')">
+                            View Certificate
+                        </button>
+
+                        <button class="btn btn-download"
+                            onclick="viewCertificate('JavaScript Fundamentals', 'August 12, 2026', '90%')">
+                            Download
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- CERTIFICATE 4 -->
+            <article class="certificate-card">
+
+                <div class="certificate-preview">
+
+                    <div class="certificate-content">
+                        <div class="small-title">LearnSphere Certificate</div>
+
+                        <h3>Web Development Foundations</h3>
+
+                        <p>Successfully completed the course</p>
+                    </div>
+
+                </div>
+
+                <div class="certificate-info">
+
+                    <h3>Web Development Foundations</h3>
+
+                    <p>Development • Beginner Level</p>
+
+                    <div class="certificate-meta">
+                        <span>📅 Jul 25, 2026</span>
+                        <span>⭐ 93%</span>
+                    </div>
+
+                    <div class="certificate-buttons">
+                        <button class="btn btn-view"
+                            onclick="viewCertificate('Web Development Foundations', 'July 25, 2026', '93%')">
+                            View Certificate
+                        </button>
+
+                        <button class="btn btn-download"
+                            onclick="viewCertificate('Web Development Foundations', 'July 25, 2026', '93%')">
+                            Download
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+    </main>
+
+
+    <!-- CERTIFICATE MODAL -->
+
+    <div class="modal" id="certificateModal">
+
+        <div class="modal-box">
+
+            <button class="close" onclick="closeCertificate()">×</button>
+
+            <div class="certificate-large">
+
+                <div class="large-inner">
+
+                    <div class="academy">
+                        LearnSphere Academy
+                    </div>
+
+                    <h1>Certificate of Completion</h1>
+
+                    <div class="presented">
+                        This certificate is proudly presented to
+                    </div>
+
+                    <div class="recipient-name" id="certificateName">
+                        Learner
+                    </div>
+
+                    <div class="large-course" id="certificateCourse">
+                        Course Name
+                    </div>
+
+                    <p class="large-description">
+                        For successfully completing the course and demonstrating
+                        dedication, knowledge and practical understanding of the
+                        learning objectives.
+                    </p>
+
+                    <div class="certificate-footer">
+
+                        <div>
+                            Date<br>
+                            <strong id="certificateDate">September 2026</strong>
+                        </div>
+
+                        <div>
+                            Final Score<br>
+                            <strong id="certificateScore">94%</strong>
+                        </div>
+
+                        <div>
+                            LearnSphere<br>
+                            <strong>Learning Platform</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-actions">
+
+                <button class="btn btn-view" onclick="window.print()">
+                    🖨 Print / Save as PDF
+                </button>
+
+                <button class="btn btn-download" onclick="closeCertificate()">
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // LOGIN CHECK
+        const email = localStorage.getItem("courseUserEmail");
+
+        if (!email) {
+            window.location.href = "index.html";
+        }
+
+
+        // USER NAME
+        function getUserName(email) {
+
+            if (!email) return "Learner";
+
+            let name = email.split("@")[0];
+
+            name = name
+                .replace(/[._-]/g, " ")
+                .replace(/\d+/g, "")
+                .trim();
+
+            if (!name) return "Learner";
+
+            return name
+                .split(" ")
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
+        }
+
+
+        const userName = getUserName(email);
+
+        document.getElementById("userName").textContent = userName;
+
+        document.getElementById("avatar").textContent =
+            userName
+                .split(" ")
+                .map(word => word.charAt(0))
+                .slice(0, 2)
+                .join("")
+                .toUpperCase();
+
+
+        // VIEW CERTIFICATE
+        function viewCertificate(course, date, score) {
+
+            document.getElementById("certificateName").textContent = userName;
+
+            document.getElementById("certificateCourse").textContent = course;
+
+            document.getElementById("certificateDate").textContent = date;
+
+            document.getElementById("certificateScore").textContent = score;
+
+            document.getElementById("certificateModal")
+                .classList.add("show");
+        }
+
+
+        // CLOSE CERTIFICATE
+        function closeCertificate() {
+
+            document.getElementById("certificateModal")
+                .classList.remove("show");
+        }
+
+
+        // CLOSE WHEN CLICKING OUTSIDE
+        document.getElementById("certificateModal")
+            .addEventListener("click", function(event) {
+
+                if (event.target === this) {
+                    closeCertificate();
+                }
+
+            });
+
+
+        // LOGOUT
+        function logout() {
+
+            localStorage.removeItem("courseUserEmail");
+            localStorage.removeItem("selectedCourse");
+
+            window.location.href = "index.html";
+        }
+
+    </script>
+
+</body>
+</html>
+```

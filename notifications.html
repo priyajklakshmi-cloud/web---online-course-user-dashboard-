@@ -1,0 +1,498 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications | LearnSphere</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Segoe UI,Arial,sans-serif;background:#f7f3ee;color:#29251f}
+a{text-decoration:none;color:inherit}
+
+.sidebar{
+position:fixed;left:0;top:0;width:245px;height:100vh;
+background:#24201d;color:#fff;padding:25px 16px;z-index:100
+}
+.logo{font-size:24px;font-weight:800;padding:0 14px 28px}
+.logo span{color:#e89b58}
+.nav-title{color:#8f8982;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;padding:12px 14px}
+.nav a{display:flex;align-items:center;gap:12px;padding:13px 14px;margin:5px 0;border-radius:12px;color:#c9c4be;font-size:14px;transition:.25s}
+.nav a:hover,.nav a.active{background:#e89b58;color:#fff}
+.badge{margin-left:auto;background:#e85d5d;color:#fff;min-width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
+.logout{position:absolute;bottom:22px;left:16px;right:16px}
+.logout a{color:#ffaaa5!important}
+
+.main{margin-left:245px;min-height:100vh}
+.topbar{height:75px;background:#fff;border-bottom:1px solid #eee5dc;display:flex;align-items:center;justify-content:space-between;padding:0 35px}
+.page-title{font-size:14px;color:#8c847b}
+.user{display:flex;align-items:center;gap:12px}
+.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#e89b58,#b96b36);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.user-name{font-weight:700;font-size:14px}
+
+.content{padding:32px 35px}
+.header h1{font-size:29px}
+.header p{color:#8c847b;font-size:13px;margin-top:6px}
+
+.summary{
+margin-top:25px;
+background:linear-gradient(135deg,#3a3029,#6b4935);
+color:#fff;
+padding:24px;
+border-radius:18px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+.summary h2{font-size:20px}
+.summary p{font-size:12px;color:#ddd2c8;margin-top:5px}
+.count{
+background:#e89b58;
+padding:10px 17px;
+border-radius:12px;
+font-weight:800;
+font-size:20px;
+}
+
+.toolbar{
+display:flex;
+gap:9px;
+margin:22px 0;
+flex-wrap:wrap;
+}
+.filter{
+border:1px solid #e5ddd5;
+background:#fff;
+padding:9px 15px;
+border-radius:9px;
+font-size:12px;
+cursor:pointer;
+color:#655d56;
+}
+.filter.active,.filter:hover{
+background:#d98449;
+color:#fff;
+border-color:#d98449;
+}
+.mark-all{
+margin-left:auto;
+border:0;
+background:#29241f;
+color:#fff;
+padding:9px 15px;
+border-radius:9px;
+cursor:pointer;
+font-size:12px;
+}
+
+.notification{
+background:#fff;
+border:1px solid #eee5dc;
+border-radius:16px;
+padding:19px;
+display:flex;
+align-items:flex-start;
+gap:15px;
+margin-bottom:13px;
+transition:.2s;
+}
+.notification.unread{
+border-left:4px solid #d98449;
+background:#fffaf6;
+}
+.notification:hover{transform:translateY(-1px)}
+
+.n-icon{
+width:45px;height:45px;
+border-radius:13px;
+background:#f5e6d7;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+flex-shrink:0;
+}
+.n-content{flex:1}
+.n-content h3{font-size:14px;margin-bottom:5px}
+.n-content p{font-size:12px;color:#827970;line-height:1.5}
+.time{font-size:10px;color:#aaa19a;margin-top:7px}
+
+.actions{display:flex;gap:7px}
+.action{
+border:1px solid #e7dfd7;
+background:#fff;
+padding:7px 9px;
+border-radius:7px;
+font-size:10px;
+cursor:pointer;
+}
+.action:hover{background:#f5e6d7}
+.delete:hover{background:#ffe9e7;color:#c34b45}
+
+.empty{
+display:none;
+background:#fff;
+border:1px solid #eee5dc;
+border-radius:18px;
+padding:50px 20px;
+text-align:center;
+color:#958b83;
+}
+.empty div{font-size:40px;margin-bottom:10px}
+
+@media(max-width:700px){
+.sidebar{position:relative;width:100%;height:auto;padding:15px}
+.logo{padding-bottom:12px}
+.nav{display:grid;grid-template-columns:repeat(2,1fr)}
+.nav-title{display:none}
+.logout{position:relative;left:auto;right:auto;bottom:auto;margin-top:10px}
+.main{margin-left:0}
+.topbar{padding:0 18px}
+.content{padding:20px 16px}
+.summary{gap:15px}
+.mark-all{margin-left:0}
+.notification{flex-wrap:wrap}
+.actions{width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="logo">Learn<span>Sphere</span></div>
+
+<div class="nav-title">Main Menu</div>
+
+<nav class="nav">
+<a href="dashboard.html">🏠 <span>Dashboard</span></a>
+<a href="courses.html">📚 <span>My Courses</span></a>
+<a href="certificates.html">🏆 <span>Certificates</span></a>
+<a href="profile.html">👤 <span>My Profile</span></a>
+<a href="schedule.html">📅 <span>Schedule</span></a>
+<a href="notifications.html" class="active">
+🔔 <span>Notifications</span>
+<span class="badge" id="sideBadge">3</span>
+</a>
+</nav>
+
+<div class="logout">
+<a href="#" onclick="logout()">↪️ <span>Logout</span></a>
+</div>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+<div class="page-title">Notifications</div>
+
+<div class="user">
+<div>
+<div class="user-name" id="userName">Learner</div>
+<div style="font-size:11px;color:#999">Active Learner</div>
+</div>
+<div class="avatar" id="avatar">L</div>
+</div>
+
+</header>
+
+<section class="content">
+
+<div class="header">
+<h1>Notifications 🔔</h1>
+<p>Stay updated with your courses, assignments and achievements.</p>
+</div>
+
+<div class="summary">
+<div>
+<h2>You have <span id="summaryCount">3</span> unread notifications</h2>
+<p>Check your latest learning updates and reminders.</p>
+</div>
+<div class="count" id="bigCount">3</div>
+</div>
+
+<div class="toolbar">
+
+<button class="filter active" onclick="filterNotifications('all',this)">All</button>
+<button class="filter" onclick="filterNotifications('unread',this)">Unread</button>
+<button class="filter" onclick="filterNotifications('course',this)">Courses</button>
+<button class="filter" onclick="filterNotifications('achievement',this)">Achievements</button>
+<button class="filter" onclick="filterNotifications('assignment',this)">Assignments</button>
+
+<button class="mark-all" onclick="markAllRead()">✓ Mark All as Read</button>
+
+</div>
+
+<div id="notificationList">
+
+<div class="notification unread" data-type="course" id="n1">
+
+<div class="n-icon">📚</div>
+
+<div class="n-content">
+<h3>New lesson available</h3>
+<p>A new lesson <b>“DOM Manipulation”</b> is now available in Full Stack Web Development.</p>
+<div class="time">10 minutes ago</div>
+</div>
+
+<div class="actions">
+<button class="action" onclick="markRead('n1')">Mark Read</button>
+<button class="action delete" onclick="deleteNotification('n1')">Delete</button>
+</div>
+
+</div>
+
+<div class="notification unread" data-type="achievement" id="n2">
+
+<div class="n-icon">🏆</div>
+
+<div class="n-content">
+<h3>Certificate earned!</h3>
+<p>Congratulations! You successfully completed <b>Python Programming Basics</b> with a score of 94%.</p>
+<div class="time">Yesterday</div>
+</div>
+
+<div class="actions">
+<button class="action" onclick="markRead('n2')">Mark Read</button>
+<button class="action delete" onclick="deleteNotification('n2')">Delete</button>
+</div>
+
+</div>
+
+<div class="notification unread" data-type="assignment" id="n3">
+
+<div class="n-icon">📝</div>
+
+<div class="n-content">
+<h3>Assignment deadline approaching</h3>
+<p>Your JavaScript practice assignment is due <b>tomorrow at 11:59 PM</b>.</p>
+<div class="time">Yesterday</div>
+</div>
+
+<div class="actions">
+<button class="action" onclick="markRead('n3')">Mark Read</button>
+<button class="action delete" onclick="deleteNotification('n3')">Delete</button>
+</div>
+
+</div>
+
+<div class="notification unread" data-type="course" id="n4">
+
+<div class="n-icon">🎥</div>
+
+<div class="n-content">
+<h3>Live learning session reminder</h3>
+<p>Your <b>AI Fundamentals</b> live learning session starts today at 02:00 PM.</p>
+<div class="time">Today</div>
+</div>
+
+<div class="actions">
+<button class="action" onclick="markRead('n4')">Mark Read</button>
+<button class="action delete" onclick="deleteNotification('n4')">Delete</button>
+</div>
+
+</div>
+
+<div class="notification" data-type="achievement" id="n5">
+
+<div class="n-icon">👤</div>
+
+<div class="n-content">
+<h3>Profile updated successfully</h3>
+<p>Your LearnSphere profile information has been updated successfully.</p>
+<div class="time">2 days ago</div>
+</div>
+
+<div class="actions">
+<button class="action delete" onclick="deleteNotification('n5')">Delete</button>
+</div>
+
+</div>
+
+<div class="notification" data-type="course" id="n6">
+
+<div class="n-icon">✨</div>
+
+<div class="n-content">
+<h3>New course recommendation</h3>
+<p>Based on your learning activity, <b>Data Science with Python</b> could be a great next course for you.</p>
+<div class="time">3 days ago</div>
+</div>
+
+<div class="actions">
+<button class="action delete" onclick="deleteNotification('n6')">Delete</button>
+</div>
+
+</div>
+
+</div>
+
+<div class="empty" id="emptyState">
+<div>🔔</div>
+<h3>No notifications found</h3>
+<p style="margin-top:6px">You're all caught up!</p>
+</div>
+
+</section>
+</main>
+
+<script>
+
+const email=localStorage.getItem("courseUserEmail");
+
+if(!email){
+window.location.href="index.html";
+}
+
+function getName(){
+
+const profile=JSON.parse(
+localStorage.getItem("learnSphereProfile")||"{}"
+);
+
+if(profile.fullName && profile.fullName.trim()){
+return profile.fullName.trim();
+}
+
+return email.split("@")[0]
+.replace(/[._-]/g," ")
+.replace(/\b\w/g,c=>c.toUpperCase());
+
+}
+
+const name=getName();
+
+document.getElementById("userName").textContent=name;
+document.getElementById("avatar").textContent=name.charAt(0).toUpperCase();
+
+function updateCount(){
+
+const unread=document.querySelectorAll(
+".notification.unread"
+).length;
+
+document.getElementById("summaryCount").textContent=unread;
+document.getElementById("bigCount").textContent=unread;
+document.getElementById("sideBadge").textContent=unread;
+
+if(unread===0){
+document.getElementById("sideBadge").style.display="none";
+}else{
+document.getElementById("sideBadge").style.display="flex";
+}
+
+}
+
+function markRead(id){
+
+const item=document.getElementById(id);
+
+if(item){
+item.classList.remove("unread");
+
+const button=item.querySelector(".action");
+
+if(button){
+button.remove();
+}
+}
+
+updateCount();
+
+}
+
+function markAllRead(){
+
+document.querySelectorAll(".notification.unread")
+.forEach(item=>{
+
+item.classList.remove("unread");
+
+const button=item.querySelector(".action");
+
+if(button){
+button.remove();
+}
+
+});
+
+updateCount();
+
+}
+
+function deleteNotification(id){
+
+const item=document.getElementById(id);
+
+if(item){
+item.remove();
+}
+
+updateCount();
+checkEmpty();
+
+}
+
+function filterNotifications(type,button){
+
+document.querySelectorAll(".filter")
+.forEach(btn=>btn.classList.remove("active"));
+
+button.classList.add("active");
+
+const notifications=
+document.querySelectorAll(".notification");
+
+notifications.forEach(item=>{
+
+if(type==="all"){
+item.style.display="flex";
+}
+else if(type==="unread"){
+item.style.display=
+item.classList.contains("unread")
+?"flex":"none";
+}
+else{
+item.style.display=
+item.dataset.type===type
+?"flex":"none";
+}
+
+});
+
+checkEmpty();
+
+}
+
+function checkEmpty(){
+
+const visible=
+[...document.querySelectorAll(".notification")]
+.filter(item=>item.style.display!=="none");
+
+document.getElementById("emptyState").style.display=
+visible.length===0?"block":"none";
+
+}
+
+function logout(){
+
+localStorage.removeItem("courseUserEmail");
+localStorage.removeItem("selectedCourse");
+
+window.location.href="index.html";
+
+}
+
+updateCount();
+
+</script>
+
+</body>
+</html>
+```

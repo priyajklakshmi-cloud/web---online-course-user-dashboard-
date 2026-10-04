@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnSphere | Online Course Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(255, 210, 160, 0.45), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(180, 220, 255, 0.45), transparent 30%),
+                #f7f5f0;
+            color: #252525;
+        }
+
+        .navbar {
+            width: 100%;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 23px;
+            font-weight: 800;
+            color: #272727;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #d97b48;
+            color: white;
+            font-size: 21px;
+            box-shadow: 0 8px 20px rgba(217, 123, 72, 0.25);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .main {
+            width: 86%;
+            max-width: 1250px;
+            margin: 20px auto 50px;
+            min-height: calc(100vh - 120px);
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+        }
+
+        .left-section {
+            padding: 25px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 15px;
+            border-radius: 30px;
+            background: #fff;
+            color: #c46232;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+            margin-bottom: 22px;
+        }
+
+        .tag span {
+            width: 8px;
+            height: 8px;
+            background: #d97b48;
+            border-radius: 50%;
+        }
+
+        h1 {
+            font-size: clamp(42px, 5vw, 72px);
+            line-height: 1.04;
+            letter-spacing: -2px;
+            margin-bottom: 22px;
+        }
+
+        h1 .highlight {
+            color: #d16f3c;
+        }
+
+        .description {
+            max-width: 570px;
+            color: #686868;
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 11px 15px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .feature span {
+            color: #d16f3c;
+            margin-right: 5px;
+        }
+
+        .start-btn {
+            border: none;
+            background: #292929;
+            color: white;
+            padding: 16px 27px;
+            border-radius: 13px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.16);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            background: #d16f3c;
+        }
+
+        .right-section {
+            display: flex;
+            justify-content: center;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 28px;
+            padding: 38px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.10);
+        }
+
+        .card-top {
+            margin-bottom: 28px;
+        }
+
+        .card-top h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .card-top p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 19px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #444;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #ddd;
+            border-radius: 11px;
+            outline: none;
+            background: #fafafa;
+            font-size: 14px;
+            transition: 0.25s;
+        }
+
+        .input-group input:focus {
+            border-color: #d17a4c;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(209, 122, 76, 0.08);
+        }
+
+        .password-row {
+            position: relative;
+        }
+
+        .password-row input {
+            padding-right: 65px;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #d16f3c;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #d16f3c;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #b85d2e;
+            transform: translateY(-2px);
+        }
+
+        .demo-note {
+            text-align: center;
+            margin-top: 18px;
+            color: #888;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 28px;
+            padding-top: 23px;
+            border-top: 1px solid #eee;
+        }
+
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 19px;
+            color: #333;
+        }
+
+        .stat small {
+            color: #888;
+            font-size: 11px;
+        }
+
+        .error {
+            display: none;
+            margin-top: 14px;
+            padding: 11px;
+            border-radius: 9px;
+            background: #fff0ed;
+            color: #c04f36;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .left-section {
+                text-align: center;
+            }
+
+            .description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .features {
+                justify-content: center;
+            }
+
+            .right-section {
+                padding-bottom: 30px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .navbar {
+                padding: 17px 5%;
+            }
+
+            .nav-link {
+                display: none;
+            }
+
+            .main {
+                width: 94%;
+                margin-top: 5px;
+            }
+
+            .left-section {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 43px;
+            }
+
+            .description {
+                font-size: 15px;
+            }
+
+            .login-card {
+                padding: 28px 22px;
+                border-radius: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">L</div>
+            LearnSphere
+        </div>
+
+        <a href="#" class="nav-link">Online Learning Platform</a>
+    </nav>
+
+    <main class="main">
+
+        <section class="left-section">
+
+            <div class="tag">
+                <span></span>
+                Learn. Grow. Achieve.
+            </div>
+
+            <h1>
+                Your Learning<br>
+                <span class="highlight">Journey Starts</span> Here.
+            </h1>
+
+            <p class="description">
+                Manage your online courses, track your learning progress,
+                discover new skills and achieve your goals from one
+                personalized learning dashboard.
+            </p>
+
+            <div class="features">
+                <div class="feature">
+                    <span>✓</span> Track Progress
+                </div>
+
+                <div class="feature">
+                    <span>✓</span> Earn Certificates
+                </div>
+
+                <div class="feature">
+                    <span>✓</span> Learn Anywhere
+                </div>
+            </div>
+
+            <button class="start-btn" onclick="focusLogin()">
+                Start Learning →
+            </button>
+
+        </section>
+
+        <section class="right-section">
+
+            <div class="login-card">
+
+                <div class="card-top">
+                    <h2>Welcome Back 👋</h2>
+                    <p>Sign in to continue your learning journey.</p>
+                </div>
+
+                <form id="loginForm">
+
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Password</label>
+
+                        <div class="password-row">
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="Enter your password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="show-password"
+                                onclick="togglePassword()"
+                            >
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="login-btn">
+                        Sign In
+                    </button>
+
+                    <div class="error" id="errorMessage">
+                        Please enter valid login details.
+                    </div>
+
+                </form>
+
+                <p class="demo-note">
+                    Demo project — any valid email and password can be used.
+                </p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <strong>50+</strong>
+                        <small>Courses</small>
+                    </div>
+
+                    <div class="stat">
+                        <strong>12K+</strong>
+                        <small>Learners</small>
+                    </div>
+
+                    <div class="stat">
+                        <strong>25+</strong>
+                        <small>Instructors</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        function togglePassword() {
+            const password = document.getElementById("password");
+            const button = document.querySelector(".show-password");
+
+            if (password.type === "password") {
+                password.type = "text";
+                button.textContent = "Hide";
+            } else {
+                password.type = "password";
+                button.textContent = "Show";
+            }
+        }
+
+        function focusLogin() {
+            document.getElementById("email").focus();
+
+            document.querySelector(".login-card").scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const errorMessage = document.getElementById("errorMessage");
+
+            if (email !== "" && password.length >= 4) {
+
+                localStorage.setItem("courseUserEmail", email);
+
+                window.location.href = "dashboard.html";
+
+            } else {
+
+                errorMessage.style.display = "block";
+                errorMessage.textContent =
+                    "Please enter a valid email and a password with at least 4 characters.";
+            }
+        });
+    </script>
+
+</body>
+</html>

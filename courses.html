@@ -1,0 +1,959 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnSphere | My Courses</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f5f0;
+            color: #292929;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 245px;
+            background: #292929;
+            color: white;
+            padding: 25px 18px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 20;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 21px;
+            font-weight: 800;
+            padding: 0 10px;
+            margin-bottom: 42px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: #d16f3c;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-title {
+            color: #999;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 0 12px;
+            margin-bottom: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: #c9c9c9;
+            text-decoration: none;
+            padding: 13px 12px;
+            border-radius: 11px;
+            margin-bottom: 5px;
+            font-size: 14px;
+            transition: 0.25s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: #3b3b3b;
+            color: white;
+        }
+
+        .nav-item.active {
+            border-left: 3px solid #d16f3c;
+        }
+
+        .icon {
+            width: 21px;
+            text-align: center;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 245px;
+            width: calc(100% - 245px);
+            padding: 30px 40px 50px;
+        }
+
+        /* TOP */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 8px 13px;
+            border-radius: 13px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+        }
+
+        .avatar {
+            width: 39px;
+            height: 39px;
+            border-radius: 50%;
+            background: #d16f3c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .profile-info strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .profile-info small {
+            color: #999;
+            font-size: 11px;
+        }
+
+        /* TOOLBAR */
+        .toolbar {
+            background: white;
+            padding: 17px;
+            border-radius: 17px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.045);
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box span {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid #e5e5e5;
+            border-radius: 11px;
+            outline: none;
+            font-size: 13px;
+            background: #fafafa;
+        }
+
+        .search-box input:focus {
+            border-color: #d16f3c;
+            background: white;
+        }
+
+        .filter {
+            padding: 12px 15px;
+            border: 1px solid #e5e5e5;
+            border-radius: 11px;
+            background: #fafafa;
+            color: #555;
+            outline: none;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* COURSE GRID */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 7px 25px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.09);
+        }
+
+        .course-cover {
+            height: 150px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
+
+        .web {
+            background: linear-gradient(135deg, #e9d7c9, #f5eee8);
+        }
+
+        .python {
+            background: linear-gradient(135deg, #dce5d5, #eef3eb);
+        }
+
+        .ai {
+            background: linear-gradient(135deg, #ddd9e9, #efedf5);
+        }
+
+        .data {
+            background: linear-gradient(135deg, #d8e4e9, #edf3f5);
+        }
+
+        .cloud {
+            background: linear-gradient(135deg, #e6dfcf, #f4f0e5);
+        }
+
+        .uiux {
+            background: linear-gradient(135deg, #e9d7df, #f5edf1);
+        }
+
+        .level {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.9);
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .course-content {
+            padding: 18px;
+        }
+
+        .category {
+            color: #d16f3c;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 7px;
+        }
+
+        .course-content h2 {
+            font-size: 16px;
+            line-height: 1.4;
+            margin-bottom: 7px;
+        }
+
+        .instructor {
+            color: #888;
+            font-size: 11px;
+            margin-bottom: 12px;
+        }
+
+        .rating {
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+
+        .rating span {
+            color: #e19a35;
+        }
+
+        .rating small {
+            color: #999;
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+        }
+
+        .course-price {
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .course-price small {
+            color: #999;
+            font-size: 10px;
+            font-weight: 400;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 9px 13px;
+            border-radius: 9px;
+            background: #292929;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .action-btn:hover {
+            background: #d16f3c;
+        }
+
+        .progress-section {
+            margin-top: 10px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            color: #999;
+            font-size: 9px;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: #d16f3c;
+            border-radius: 10px;
+        }
+
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 18px;
+            color: #888;
+            grid-column: 1 / -1;
+        }
+
+        .no-results div {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        /* MOBILE */
+        .mobile-header {
+            display: none;
+        }
+
+        @media (max-width: 1100px) {
+            .course-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .mobile-header {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 25px;
+                font-weight: 800;
+            }
+
+            .profile {
+                display: none;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">L</div>
+            LearnSphere
+        </div>
+
+        <div class="menu-title">MAIN MENU</div>
+
+        <a href="dashboard.html" class="nav-item">
+            <span class="icon">⌂</span>
+            Dashboard
+        </a>
+
+        <a href="courses.html" class="nav-item active">
+            <span class="icon">▣</span>
+            My Courses
+        </a>
+
+        <a href="certificates.html" class="nav-item">
+            <span class="icon">◇</span>
+            Certificates
+        </a>
+
+        <a href="profile.html" class="nav-item">
+            <span class="icon">♙</span>
+            My Profile
+        </a>
+
+        <div class="menu-title" style="margin-top:30px;">
+            LEARNING
+        </div>
+
+        <a href="#" class="nav-item">
+            <span class="icon">◷</span>
+            Schedule
+        </a>
+
+        <a href="#" class="nav-item">
+            <span class="icon">♢</span>
+            Notifications
+        </a>
+
+        <div class="logout">
+            <a href="index.html" class="nav-item" onclick="logout()">
+                <span class="icon">↪</span>
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <div class="mobile-header">
+            <span>LearnSphere</span>
+            <span>☰</span>
+        </div>
+
+        <!-- TOP BAR -->
+        <div class="topbar">
+
+            <div class="page-title">
+                <h1>My Courses</h1>
+                <p>Explore your enrolled courses and continue learning.</p>
+            </div>
+
+            <div class="profile">
+                <div class="avatar" id="avatar">L</div>
+
+                <div class="profile-info">
+                    <strong id="userName">Learner</strong>
+                    <small>Student Account</small>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SEARCH & FILTER -->
+        <div class="toolbar">
+
+            <div class="search-box">
+                <span>⌕</span>
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search courses..."
+                    onkeyup="filterCourses()"
+                >
+            </div>
+
+            <select
+                class="filter"
+                id="categoryFilter"
+                onchange="filterCourses()"
+            >
+                <option value="all">All Categories</option>
+                <option value="development">Development</option>
+                <option value="data">Data Science</option>
+                <option value="ai">Artificial Intelligence</option>
+                <option value="cloud">Cloud Computing</option>
+                <option value="design">Design</option>
+            </select>
+
+        </div>
+
+        <!-- COURSE GRID -->
+        <div class="course-grid" id="courseGrid">
+
+            <!-- COURSE 1 -->
+            <div class="course-card"
+                 data-category="development"
+                 data-title="full stack web development">
+
+                <div class="course-cover web">
+                    💻
+                    <span class="level">Intermediate</span>
+                </div>
+
+                <div class="course-content">
+
+                    <div class="category">Development</div>
+
+                    <h2>Full Stack Web Development</h2>
+
+                    <p class="instructor">
+                        By Alex Johnson
+                    </p>
+
+                    <div class="rating">
+                        <span>★★★★★</span>
+                        4.8 <small>(1,240 reviews)</small>
+                    </div>
+
+                    <div class="progress-section">
+
+                        <div class="progress-info">
+                            <span>Course Progress</span>
+                            <span>78%</span>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress" style="width:78%;"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="course-footer">
+                        <div class="course-price">
+                            $49 <small> / course</small>
+                        </div>
+
+                        <button class="action-btn"
+                                onclick="openCourse('Full Stack Web Development')">
+                            Continue
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- COURSE 2 -->
+            <div class="course-card"
+                 data-category="development"
+                 data-title="python programming">
+
+                <div class="course-cover python">
+                    🐍
+                    <span class="level">Beginner</span>
+                </div>
+
+                <div class="course-content">
+
+                    <div class="category">Development</div>
+
+                    <h2>Python Programming</h2>
+
+                    <p class="instructor">
+                        By Sarah Williams
+                    </p>
+
+                    <div class="rating">
+                        <span>★★★★★</span>
+                        4.9 <small>(980 reviews)</small>
+                    </div>
+
+                    <div class="progress-section">
+
+                        <div class="progress-info">
+                            <span>Course Progress</span>
+                            <span>62%</span>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress" style="width:62%;"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="course-footer">
+                        <div class="course-price">
+                            $39 <small> / course</small>
+                        </div>
+
+                        <button class="action-btn"
+                                onclick="openCourse('Python Programming')">
+                            Continue
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- COURSE 3 -->
+            <div class="course-card"
+                 data-category="ai"
+                 data-title="artificial intelligence fundamentals">
+
+                <div class="course-cover ai">
+                    🤖
+                    <span class="level">Intermediate</span>
+                </div>
+
+                <div class="course-content">
+
+                    <div class="category">Artificial Intelligence</div>
+
+                    <h2>Artificial Intelligence Fundamentals</h2>
+
+                    <p class="instructor">
+                        By Daniel Lee
+                    </p>
+
+                    <div class="rating">
+                        <span>★★★★★</span>
+                        4.7 <small>(760 reviews)</small>
+                    </div>
+
+                    <div class="progress-section">
+
+                        <div class="progress-info">
+                            <span>Course Progress</span>
+                            <span>41%</span>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress" style="width:41%;"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="course-footer">
+                        <div class="course-price">
+                            $59 <small> / course</small>
+                        </div>
+
+                        <button class="action-btn"
+                                onclick="openCourse('Artificial Intelligence Fundamentals')">
+                            Continue
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- COURSE 4 -->
+            <div class="course-card"
+                 data-category="data"
+                 data-title="data science with python">
+
+                <div class="course-cover data">
+                    📊
+                    <span class="level">Intermediate</span>
+                </div>
+
+                <div class="course-content">
+
+                    <div class="category">Data Science</div>
+
+                    <h2>Data Science with Python</h2>
+
+                    <p class="instructor">
+                        By Emma Brown
+                    </p>
+
+                    <div class="rating">
+                        <span>★★★★★</span>
+                        4.8 <small>(620 reviews)</small>
+                    </div>
+
+                    <div class="progress-section">
+
+                        <div class="progress-info">
+                            <span>Course Progress</span>
+                            <span>35%</span>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress" style="width:35%;"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="course-footer">
+                        <div class="course-price">
+                            $55 <small> / course</small>
+                        </div>
+
+                        <button class="action-btn"
+                                onclick="openCourse('Data Science with Python')">
+                            Continue
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- COURSE 5 -->
+            <div class="course-card"
+                 data-category="cloud"
+                 data-title="cloud computing essentials">
+
+                <div class="course-cover cloud">
+                    ☁️
+                    <span class="level">Beginner</span>
+                </div>
+
+                <div class="course-content">
+
+                    <div class="category">Cloud Computing</div>
+
+                    <h2>Cloud Computing Essentials</h2>
+
+                    <p class="instructor">
+                        By Michael Clark
+                    </p>
+
+                    <div class="rating">
+                        <span>★★★★★</span>
+                        4.6 <small>(540 reviews)</small>
+                    </div>
+
+                    <div class="progress-section">
+
+                        <div class="progress-info">
+                            <span>Course Progress</span>
+                            <span>20%</span>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress" style="width:20%;"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="course-footer">
+                        <div class="course-price">
+                            $45 <small> / course</small>
+                        </div>
+
+                        <button class="action-btn"
+                                onclick="openCourse('Cloud Computing Essentials')">
+                            Continue
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- COURSE 6 -->
+            <div class="course-card"
+                 data-category="design"
+                 data-title="ui ux design fundamentals">
+
+                <div class="course-cover uiux">
+                    🎨
+                    <span class="level">Beginner</span>
+                </div>
+
+                <div class="course-content">
+
+                    <div class="category">Design</div>
+
+                    <h2>UI/UX Design Fundamentals</h2>
+
+                    <p class="instructor">
+                        By Olivia Martin
+                    </p>
+
+                    <div class="rating">
+                        <span>★★★★★</span>
+                        4.9 <small>(890 reviews)</small>
+                    </div>
+
+                    <div class="progress-section">
+
+                        <div class="progress-info">
+                            <span>Course Progress</span>
+                            <span>12%</span>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress" style="width:12%;"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="course-footer">
+                        <div class="course-price">
+                            $42 <small> / course</small>
+                        </div>
+
+                        <button class="action-btn"
+                                onclick="openCourse('UI/UX Design Fundamentals')">
+                            Continue
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="no-results" id="noResults">
+                <div>🔍</div>
+                <h3>No courses found</h3>
+                <p>Try another course name or category.</p>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+
+    /* LOGIN CHECK */
+    const email = localStorage.getItem("courseUserEmail");
+
+    if (!email) {
+        window.location.href = "index.html";
+    }
+
+    /* USER NAME */
+    if (email) {
+
+        let name = email.split("@")[0];
+
+        name = name
+            .replace(/[._-]/g, " ")
+            .replace(/\b\w/g, letter => letter.toUpperCase());
+
+        document.getElementById("userName").textContent = name;
+
+        document.getElementById("avatar").textContent =
+            name.charAt(0).toUpperCase();
+    }
+
+    /* COURSE SEARCH + FILTER */
+    function filterCourses() {
+
+        const search =
+            document.getElementById("searchInput")
+            .value
+            .toLowerCase()
+            .trim();
+
+        const category =
+            document.getElementById("categoryFilter").value;
+
+        const cards =
+            document.querySelectorAll(".course-card");
+
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+
+            const title =
+                card.dataset.title.toLowerCase();
+
+            const cardCategory =
+                card.dataset.category;
+
+            const searchMatch =
+                title.includes(search);
+
+            const categoryMatch =
+                category === "all" ||
+                cardCategory === category;
+
+            if (searchMatch && categoryMatch) {
+
+                card.style.display = "block";
+                visibleCount++;
+
+            } else {
+
+                card.style.display = "none";
+            }
+        });
+
+        document.getElementById("noResults").style.display =
+            visibleCount === 0 ? "block" : "none";
+    }
+
+    /* OPEN COURSE */
+    function openCourse(courseName) {
+
+        localStorage.setItem("selectedCourse", courseName);
+
+        window.location.href = "course-details.html";
+    }
+
+    /* LOGOUT */
+    function logout() {
+        localStorage.removeItem("courseUserEmail");
+    }
+
+</script>
+
+</body>
+</html>
+```

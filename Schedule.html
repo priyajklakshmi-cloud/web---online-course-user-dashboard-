@@ -1,0 +1,355 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schedule | LearnSphere</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Segoe UI,Arial,sans-serif;background:#f7f3ee;color:#29251f}
+a{text-decoration:none;color:inherit}
+
+.sidebar{
+position:fixed;left:0;top:0;width:245px;height:100vh;
+background:#24201d;color:white;padding:25px 16px;z-index:100
+}
+.logo{font-size:24px;font-weight:800;padding:0 14px 28px}
+.logo span{color:#e89b58}
+.nav-title{color:#8f8982;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;padding:12px 14px}
+.nav a{display:flex;align-items:center;gap:12px;padding:13px 14px;margin:5px 0;border-radius:12px;color:#c9c4be;font-size:14px;transition:.25s}
+.nav a:hover,.nav a.active{background:#e89b58;color:#fff}
+.badge{margin-left:auto;background:#e85d5d;color:#fff;min-width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
+.logout{position:absolute;bottom:22px;left:16px;right:16px}
+.logout a{color:#ffaaa5!important}
+
+.main{margin-left:245px;min-height:100vh}
+.topbar{height:75px;background:#fff;border-bottom:1px solid #eee5dc;display:flex;align-items:center;justify-content:space-between;padding:0 35px}
+.page-title{font-size:14px;color:#8c847b}
+.user{display:flex;align-items:center;gap:12px}
+.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#e89b58,#b96b36);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.user-name{font-weight:700;font-size:14px}
+.content{padding:32px 35px}
+
+.header h1{font-size:29px}
+.header p{color:#8c847b;margin-top:6px;font-size:13px}
+
+.date-strip{
+display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin:25px 0
+}
+.date{
+background:#fff;border:1px solid #eee5dc;border-radius:14px;text-align:center;padding:15px 5px;cursor:pointer
+}
+.date:hover,.date.active{background:#d98449;color:white}
+.date small{display:block;font-size:11px}
+.date strong{display:block;font-size:20px;margin-top:5px}
+
+.layout{display:grid;grid-template-columns:2fr 1fr;gap:22px}
+.card{background:#fff;border:1px solid #eee5dc;border-radius:18px;padding:22px;margin-bottom:22px}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.card-head h2{font-size:18px}
+
+.session{
+display:flex;gap:18px;padding:17px 0;border-bottom:1px solid #eee8e2
+}
+.session:last-child{border-bottom:0}
+.time{width:80px;font-size:12px;font-weight:700;color:#9a9188;padding-top:4px}
+.session-icon{
+width:45px;height:45px;background:#f5e6d7;border-radius:12px;
+display:flex;align-items:center;justify-content:center;font-size:21px
+}
+.session-info{flex:1}
+.session-info h3{font-size:14px}
+.session-info p{font-size:11px;color:#948b82;margin-top:5px}
+.status{font-size:10px;padding:5px 9px;border-radius:20px;background:#fff0e1;color:#b56734;height:max-content}
+.status.done{background:#e7f5eb;color:#3c8750}
+.start{
+border:0;background:#f5e6d7;color:#a95e2d;padding:8px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer
+}
+
+.plan{
+display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid #eee8e2
+}
+.plan:last-child{border:0}
+.plan-day{width:65px;font-size:12px;font-weight:700}
+.plan-info{flex:1}
+.plan-info b{font-size:13px}
+.plan-info span{display:block;font-size:11px;color:#958d85;margin-top:3px}
+.done{color:#3e8b53;font-size:12px;font-weight:700}
+.upcoming{color:#c7773f;font-size:12px;font-weight:700}
+
+.mini-calendar{
+display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center;font-size:11px
+}
+.cal-head{color:#999;padding:5px 0}
+.cal-day{padding:8px 2px;border-radius:7px}
+.cal-day.today{background:#d98449;color:white;font-weight:700}
+.cal-day.event{border:1px solid #e3a16e}
+.goal{text-align:center}
+.circle{
+width:135px;height:135px;border-radius:50%;margin:18px auto;
+background:conic-gradient(#d98449 80%,#eee8e1 0);
+display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative
+}
+.circle:before{
+content:"";position:absolute;width:104px;height:104px;background:white;border-radius:50%
+}
+.circle strong,.circle span{position:relative;z-index:1}
+.circle strong{font-size:24px}
+.circle span{font-size:11px;color:#8c847b}
+
+@media(max-width:1000px){
+.layout{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+.sidebar{position:relative;width:100%;height:auto;padding:15px}
+.logo{padding-bottom:12px}
+.nav{display:grid;grid-template-columns:repeat(2,1fr)}
+.nav-title{display:none}
+.logout{position:relative;left:auto;right:auto;bottom:auto;margin-top:10px}
+.main{margin-left:0}
+.topbar{padding:0 18px}
+.content{padding:20px 16px}
+.date-strip{overflow-x:auto;grid-template-columns:repeat(7,80px)}
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+<div class="logo">Learn<span>Sphere</span></div>
+
+<div class="nav-title">Main Menu</div>
+<nav class="nav">
+<a href="dashboard.html">🏠 <span>Dashboard</span></a>
+<a href="courses.html">📚 <span>My Courses</span></a>
+<a href="certificates.html">🏆 <span>Certificates</span></a>
+<a href="profile.html">👤 <span>My Profile</span></a>
+<a href="schedule.html" class="active">📅 <span>Schedule</span></a>
+<a href="notifications.html">🔔 <span>Notifications</span><span class="badge">3</span></a>
+</nav>
+
+<div class="logout">
+<a href="#" onclick="logout()">↪️ <span>Logout</span></a>
+</div>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+<div class="page-title">Learning Schedule</div>
+
+<div class="user">
+<div>
+<div class="user-name" id="userName">Learner</div>
+<div style="font-size:11px;color:#999">Active Learner</div>
+</div>
+<div class="avatar" id="avatar">L</div>
+</div>
+</header>
+
+<section class="content">
+
+<div class="header">
+<h1>My Schedule 📅</h1>
+<p>Plan your learning sessions and stay consistent.</p>
+</div>
+
+<div class="date-strip">
+<div class="date"><small>MON</small><strong>5</strong></div>
+<div class="date active"><small>TUE</small><strong>6</strong></div>
+<div class="date"><small>WED</small><strong>7</strong></div>
+<div class="date"><small>THU</small><strong>8</strong></div>
+<div class="date"><small>FRI</small><strong>9</strong></div>
+<div class="date"><small>SAT</small><strong>10</strong></div>
+<div class="date"><small>SUN</small><strong>11</strong></div>
+</div>
+
+<div class="layout">
+
+<div>
+
+<div class="card">
+<div class="card-head">
+<h2>Tuesday, October 6</h2>
+<span style="font-size:12px;color:#9a9188">4 Sessions</span>
+</div>
+
+<div class="session">
+<div class="time">09:00 AM</div>
+<div class="session-icon">💻</div>
+<div class="session-info">
+<h3>JavaScript Essentials</h3>
+<p>Full Stack Web Development • Lesson 4</p>
+</div>
+<span class="status">Upcoming</span>
+<button class="start" onclick="startSession('JavaScript Essentials')">Start</button>
+</div>
+
+<div class="session">
+<div class="time">11:30 AM</div>
+<div class="session-icon">🐍</div>
+<div class="session-info">
+<h3>Python Practice Session</h3>
+<p>Python Programming • Practice</p>
+</div>
+<span class="status">Upcoming</span>
+<button class="start" onclick="startSession('Python Practice Session')">Start</button>
+</div>
+
+<div class="session">
+<div class="time">02:00 PM</div>
+<div class="session-icon">🤖</div>
+<div class="session-info">
+<h3>AI Fundamentals</h3>
+<p>Artificial Intelligence • Live Session</p>
+</div>
+<span class="status">Live Soon</span>
+<button class="start" onclick="startSession('AI Fundamentals')">Join</button>
+</div>
+
+<div class="session">
+<div class="time">06:30 PM</div>
+<div class="session-icon">📝</div>
+<div class="session-info">
+<h3>Daily Quiz</h3>
+<p>JavaScript • 10 Questions</p>
+</div>
+<span class="status done">Completed</span>
+</div>
+
+</div>
+
+<div class="card">
+<div class="card-head">
+<h2>Weekly Learning Plan</h2>
+</div>
+
+<div class="plan">
+<div class="plan-day">Monday</div>
+<div class="plan-info"><b>Web Development</b><span>2 hours</span></div>
+<div class="done">✓ Done</div>
+</div>
+
+<div class="plan">
+<div class="plan-day">Tuesday</div>
+<div class="plan-info"><b>JavaScript + Python</b><span>3 hours</span></div>
+<div class="upcoming">Today</div>
+</div>
+
+<div class="plan">
+<div class="plan-day">Wednesday</div>
+<div class="plan-info"><b>Cloud Computing</b><span>1.5 hours</span></div>
+<div class="upcoming">Upcoming</div>
+</div>
+
+<div class="plan">
+<div class="plan-day">Thursday</div>
+<div class="plan-info"><b>UI/UX Design</b><span>2 hours</span></div>
+<div class="upcoming">Upcoming</div>
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="card">
+<div class="card-head">
+<h2>Next Session</h2>
+</div>
+
+<div style="background:#fbf1e7;padding:18px;border-radius:14px">
+<div style="font-size:11px;color:#a56638">UP NEXT</div>
+<h3 style="margin:7px 0;font-size:16px">JavaScript Essentials</h3>
+<p style="font-size:12px;color:#8f857c">Today at 09:00 AM</p>
+<button class="start" style="margin-top:14px;width:100%" onclick="startSession('JavaScript Essentials')">
+Start Learning
+</button>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head">
+<h2>October 2026</h2>
+</div>
+
+<div class="mini-calendar">
+<div class="cal-head">M</div><div class="cal-head">T</div><div class="cal-head">W</div><div class="cal-head">T</div><div class="cal-head">F</div><div class="cal-head">S</div><div class="cal-head">S</div>
+
+<div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day">5</div><div class="cal-day">6</div><div class="cal-day">7</div>
+<div class="cal-day">8</div><div class="cal-day">9</div><div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day event">12</div><div class="cal-day">13</div><div class="cal-day">14</div>
+<div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day event">18</div><div class="cal-day">19</div><div class="cal-day">20</div><div class="cal-day">21</div>
+<div class="cal-day">22</div><div class="cal-day">23</div><div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day">27</div><div class="cal-day">28</div>
+<div class="cal-day">29</div><div class="cal-day">30</div><div class="cal-day">31</div>
+</div>
+</div>
+
+<div class="card goal">
+<h2>Weekly Goal</h2>
+
+<div class="circle">
+<strong>8/10</strong>
+<span>Hours</span>
+</div>
+
+<p style="font-size:12px;color:#8c847b">
+80% completed this week
+</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+</main>
+
+<script>
+const email = localStorage.getItem("courseUserEmail");
+
+if(!email){
+window.location.href="index.html";
+}
+
+function getName(){
+const profile=JSON.parse(localStorage.getItem("learnSphereProfile")||"{}");
+
+if(profile.fullName && profile.fullName.trim()){
+return profile.fullName.trim();
+}
+
+return email.split("@")[0]
+.replace(/[._-]/g," ")
+.replace(/\b\w/g,c=>c.toUpperCase());
+}
+
+const name=getName();
+
+document.getElementById("userName").textContent=name;
+document.getElementById("avatar").textContent=name.charAt(0).toUpperCase();
+
+function startSession(session){
+alert("📚 "+session+"\n\nYour learning session is ready!\n\nThis is a demo feature.");
+}
+
+function logout(){
+localStorage.removeItem("courseUserEmail");
+localStorage.removeItem("selectedCourse");
+window.location.href="index.html";
+}
+
+document.querySelectorAll(".date").forEach(day=>{
+day.addEventListener("click",function(){
+document.querySelectorAll(".date").forEach(d=>d.classList.remove("active"));
+this.classList.add("active");
+});
+});
+</script>
+
+</body>
+</html>
+```
